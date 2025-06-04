@@ -11,7 +11,7 @@ vim.o.relativenumber = true
 -- vim.o.relativenumber = true
 
 -- Enable mouse mode, can be useful for resizing splits for example!
-vim.o.mouse = ''
+vim.o.mouse = 'a'
 
 -- Don't show the mode, since it's already in the status line
 vim.o.showmode = false
@@ -27,9 +27,6 @@ end)
 -- Enable break indent
 vim.o.breakindent = true
 vim.o.smartindent = true
-vim.o.tabstop = 4
-vim.o.shiftwidth = 4
-vim.o.expandtab = false
 
 -- Save undo history
 vim.o.undofile = true
@@ -48,7 +45,7 @@ vim.o.updatetime = 250
 vim.o.timeoutlen = 300
 
 -- Configure how new splits should be opened
-vim.o.splitright = true
+vim.o.splitright = false
 vim.o.splitbelow = true
 
 -- Sets how neovim will display certain whitespace characters in the editor.
@@ -76,4 +73,8 @@ vim.o.scrolloff = 10
 -- See `:help 'confirm'`
 vim.o.confirm = true
 
--- vim: ts=2 sts=2 sw=2 et
+vim.o.tabstop = 4 -- How many spaces a tab character occupies visually
+vim.o.shiftwidth = 4 -- How many spaces to use when indenting with >>
+vim.o.expandtab = false -- Use real tab characters (not spaces)
+
+-- vim: ts=4 sts=4 sw=4 noet

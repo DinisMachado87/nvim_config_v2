@@ -4,7 +4,7 @@ return {
     -- `lazydev` configures Lua LSP for your Neovim config, runtime and plugins
     -- used for completion, annotations and signatures of Neovim apis
     'folke/lazydev.nvim',
-    ft = 'lua',
+    ft = { 'lua' },
     opts = {
       library = {
         -- Load luvit types when the `vim.uv` word is found
@@ -258,7 +258,7 @@ return {
 
       require('mason-lspconfig').setup {
         ensure_installed = {}, -- explicitly set to an empty table (Kickstart populates installs via mason-tool-installer)
-        automatic_installation = false,
+        automatic_installation = true,
         handlers = {
           function(server_name)
             local server = servers[server_name] or {}
@@ -273,4 +273,4 @@ return {
     end,
   },
 }
--- vim: ts=2 sts=2 sw=2 et
+-- vim: ts=4 sts=4 sw=4 noet

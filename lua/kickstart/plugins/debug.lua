@@ -94,6 +94,7 @@ return {
       -- online, please don't ask me how to install them :)
       ensure_installed = {
         -- Update this to ensure that you have the debuggers for the langs you want
+        'lldb',
         'delve',
       },
     }
@@ -135,6 +136,39 @@ return {
     dap.listeners.after.event_initialized['dapui_config'] = dapui.open
     dap.listeners.before.event_terminated['dapui_config'] = dapui.close
     dap.listeners.before.event_exited['dapui_config'] = dapui.close
+
+    local dap = require 'dap'
+
+    -- Replace your LLDB adapter configuration with this:
+    dap.adapters.codelldb = {
+      type = 'server',
+      port = '${port}',
+      executable = {
+        command = vim.fn.stdpath 'data' .. '/mason/packages/codelldb/extension/adapter/codelldb',
+        args = { '--port', '${port}' },
+      },
+    }
+
+    -- Update your debug configurations to use codelldb:
+    dap.configurations.c = {
+      {
+        name = 'Launch file',
+        type = 'codelldb',
+        request = 'launch',
+        program = function()
+          return vim.fn.input('Path to executable: ', vim.fn.getcwd() .. '/', 'file')
+        end,
+        cwd = '${workspaceFolder}',
+        stopOnEntry = false,
+        args = function()
+          local args_string = vim.fn.input 'Arguments: '
+          return vim.split(args_string, ' ')
+        end,
+      },
+    }
+
+    -- Optional: Reuse config for C++
+    dap.configurations.cpp = dap.configurations.c
 
     -- Install golang specific config
     require('dap-go').setup {
