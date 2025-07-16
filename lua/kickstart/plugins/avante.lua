@@ -1,5 +1,15 @@
 return {
   'yetone/avante.nvim',
+  -- if you want to build from source then do `make BUILD_FROM_SOURCE=true`
+  -- ⚠️ must add this setting! ! !
+  build = function()
+    -- conditionally use the correct build system for the current OS
+    if vim.fn.has 'win32' == 1 then
+      return 'powershell -ExecutionPolicy Bypass -File Build.ps1 -BuildFromSource false'
+    else
+      return 'make'
+    end
+  end,
   event = 'VeryLazy',
   version = false, -- Never set this value to "*"! Never!
   ---@module 'avante'
@@ -7,24 +17,20 @@ return {
   opts = {
     -- add any opts here
     -- for example
+    provider = 'claude',
     providers = {
-      openai = {
-        endpoint = 'https://api.anthropic.com/v1',
-        model = 'claude-3-opus-20240229', -- your desired model (or use gpt-4o, etc.)
+      claude = {
+        endpoint = 'https://api.anthropic.com',
+        model = 'claude-sonnet-4-20250514',
+        timeout = 30000, -- Timeout in milliseconds
         extra_request_body = {
-          timeout = 30000, -- Timeout in milliseconds, increase this for reasoning models
           temperature = 0.75,
-          max_completion_tokens = 8192, -- Increase this to include reasoning tokens (for reasoning models)
-          --reasoning_effort = "medium", -- low|medium|high, only used for reasoning models
+          max_tokens = 20480,
         },
       },
     },
   },
-  -- if you want to build from source then do `make BUILD_FROM_SOURCE=true`
-  build = 'make',
-  -- build = "powershell -ExecutionPolicy Bypass -File Build.ps1 -BuildFromSource false" -- for windows
   dependencies = {
-    'nvim-treesitter/nvim-treesitter',
     'nvim-lua/plenary.nvim',
     'MunifTanjim/nui.nvim',
     --- The below dependencies are optional,
