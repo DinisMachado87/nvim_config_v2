@@ -222,7 +222,7 @@ return {
             },
           },
         },
-        -- djlsp = {},
+        djlsp = {},
         ruff = {
           init_options = {
             settings = {

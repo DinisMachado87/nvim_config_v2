@@ -6,7 +6,7 @@ return {
     -- Configure the plugin
     norm.setup {
       header_on_save = true,
-      format_on_save = false,
+      format_on_save = true,
       liner_on_change = true,
     }
 

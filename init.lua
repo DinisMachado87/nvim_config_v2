@@ -92,7 +92,8 @@ vim.g.maplocalleader = ' '
 
 -- Set to true if you have a Nerd Font installed and selected in the terminal
 vim.g.have_nerd_font = true
-
+vim.g.user42 = 'dimachad'
+vim.g.mail42 = 'dimachad@student.42berlin.de'
 vim.env.PATH = vim.env.PATH .. ':' .. os.getenv 'HOME' .. '/.local/bin'
 -- [[ Setting options ]]
 require 'options'
