@@ -106,7 +106,7 @@ return {
     -- Mason setup
     require('mason-nvim-dap').setup {
       automatic_installation = true,
-      ensure_installed = { 'lldb', 'delve' },
+      ensure_installed = { 'lldb', 'delve', 'debugpy' },
     }
 
     -- Adapter setup (C/C++)
@@ -141,6 +141,39 @@ return {
     -- Go
     require('dap-go').setup {
       delve = { detached = vim.fn.has 'win32' == 0 },
+    }
+    -- Python adapter (using debugpy directly)
+    dap.adapters.debugpy = {
+      type = 'executable',
+      command = vim.fn.stdpath 'data' .. '/mason/packages/debugpy/venv/bin/python',
+      args = { '-m', 'debugpy.adapter' },
+    }
+
+    -- Python configurations
+    dap.configurations.python = {
+      {
+        type = 'debugpy',
+        request = 'launch',
+        name = 'Launch file',
+        program = '${file}',
+        pythonPath = function()
+          -- You can change this to use a virtual environment if needed
+          return 'python'
+        end,
+      },
+      {
+        type = 'debugpy',
+        request = 'launch',
+        name = 'Launch file with arguments',
+        program = '${file}',
+        args = function()
+          local args_string = vim.fn.input 'Arguments: '
+          return vim.split(args_string, ' ')
+        end,
+        pythonPath = function()
+          return 'python'
+        end,
+      },
     }
   end,
 }
