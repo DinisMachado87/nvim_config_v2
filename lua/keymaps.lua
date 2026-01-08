@@ -38,7 +38,11 @@ vim.keymap.set('n', '<C-l>', '<C-w><C-l>', { desc = 'Move focus to the right win
 vim.keymap.set('n', '<C-j>', '<C-w><C-j>', { desc = 'Move focus to the lower window' })
 vim.keymap.set('n', '<C-k>', '<C-w><C-k>', { desc = 'Move focus to the upper window' })
 
-vim.keymap.set('n', '<leader>cpp', ':!cp -r ~/.config/nvim/templates/cpp/* .<CR>:e srcs/main.cpp', { desc = 'Init cpp repo' })
+vim.keymap.set('n', '<leader>cpp', ':!cp -r ~/.config/nvim/templates/cpp-init/* .<CR>:e srcs/main.cpp', { desc = 'Init cpp repo' })
+vim.keymap.set('n', '<leader>hd', function()
+  local filename = vim.fn.expand('%:t'):upper():gsub('%.', '_')
+  vim.api.nvim_input('ggO<Esc>' .. 'O#ifndef ' .. filename .. '<Esc>' .. 'o# define ' .. filename .. '<Esc>' .. 'Go<Esc>' .. 'o#endif<Esc>' .. '3gg')
+end, { desc = 'Add header guards' })
 
 -- [[ Basic Autocommands ]]
 --  See `:help lua-guide-autocommands`

@@ -210,27 +210,33 @@ return {
       local servers = {
         clangd = {},
         -- gopls = {},
-        pyright = {
-          settings = {
-            python = {
-              analysis = {
-                autoImportCompletions = true,
-                typeCheckingMode = 'basic',
-              },
-              venvPath = '.',
-              venv = 'venv',
-            },
-          },
-        },
-        djlsp = {},
+        -- --
+        --     pyright = {
+        --       settings = {
+        --         python = {
+        --           analysis = {
+        --             autoImportCompletions = true,
+        --             typeCheckingMode = 'basic',
+        --             -- Tell Pyright about Django
+        --             extraPaths = { '.' },
+        --           },
+        --           venvPath = '.',
+        --           venv = 'venv',
+        --         },
+        --       },
+        --     },
+
         ruff = {
           init_options = {
             settings = {
-              -- Ruff settings if needed
+              -- Disable unused import removal
+              organizeImports = false,
+              fixAll = false,
             },
           },
         },
-        -- rust_analyzer = {},
+        --Rust
+        rust_analyzer = {},
         -- ... etc. See `:help lspconfig-all` for a list of all the pre-configured LSPs
         --
         -- Some languages (like typescript) have entire language plugins that can be useful:
@@ -238,8 +244,17 @@ return {
         --
         -- But for many setups, the LSP (`ts_ls`) will work just fine
         ts_ls = {},
+        --DAJNGO
+        djlsp = {},
+        --JAVA
+        -- jdtls = {
+        --   -- Disable formatting capability from jdtls
+        --   on_attach = function(client, bufnr)
+        --     client.server_capabilities.documentFormattingProvider = false
+        --     client.server_capabilities.documentRangeFormattingProvider = false
+        --   end,
+        -- },
         --
-
         lua_ls = {
           -- cmd = { ... },
           -- filetypes = { ... },

@@ -16,73 +16,29 @@ return {
     'jay-babu/mason-nvim-dap.nvim',
     'leoluz/nvim-dap-go',
   },
-  keys = {
-    -- Core controls
-    {
-      '<F5>',
-      function()
-        require('dap').continue()
-      end,
-      desc = 'Debug: Start/Continue',
-    },
-    {
-      '<F1>',
-      function()
-        require('dap').step_into()
-      end,
-      desc = 'Debug: Step Into',
-    },
-    {
-      '<F2>',
-      function()
-        require('dap').step_over()
-      end,
-      desc = 'Debug: Step Over',
-    },
-    {
-      '<F3>',
-      function()
-        require('dap').step_out()
-      end,
-      desc = 'Debug: Step Out',
-    },
-    {
-      '<leader>b',
-      function()
-        require('dap').toggle_breakpoint()
-      end,
-      desc = 'Debug: Toggle Breakpoint',
-    },
-    {
-      '<leader>B',
-      function()
-        require('dap').set_breakpoint(vim.fn.input 'Breakpoint condition: ')
-      end,
-      desc = 'Debug: Set Breakpoint',
-    },
-    -- Manual controls for UI and virtual text
-    {
-      '<F7>',
-      function()
-        require('dapui').toggle()
-      end,
-      desc = 'Debug: Toggle DAP UI panels',
-    },
-    {
-      '<F8>',
-      function()
-        require('dap').terminate()
-      end,
-      desc = 'Debug: Terminate session',
-    },
-    {
-      '<leader>dv',
-      function()
-        require('nvim-dap-virtual-text').toggle()
-      end,
-      desc = 'Debug: Toggle virtual text',
-    },
-  },
+  keys = function()
+    local dap = require 'dap'
+    return {
+      { '<F1>', dap.step_into, desc = 'Debug: Step Into' },
+      { '<F2>', dap.step_over, desc = 'Debug: Step Over' },
+      { '<F3>', dap.step_out, desc = 'Debug: Step Out' },
+      { '<F5>', dap.continue, desc = 'Debug: Start/Continue' },
+
+      { '<F8>', dap.terminate, desc = 'Debug: Terminate session' },
+
+      { '<F7>', require('dapui').toggle, desc = 'Debug: Toggle DAP UI panels' },
+      { '<leader>dv', require('nvim-dap-virtual-text').toggle, desc = 'Debug: Toggle virtual text' },
+
+      { '<leader>b', dap.toggle_breakpoint, desc = 'Debug: Toggle Breakpoint' },
+      {
+        '<leader>B',
+        function()
+          dap.set_breakpoint(vim.fn.input 'Breakpoint condition: ')
+        end,
+        desc = 'Debug: Set Breakpoint',
+      },
+    }
+  end,
 
   config = function()
     local dap = require 'dap'
@@ -142,10 +98,11 @@ return {
     require('dap-go').setup {
       delve = { detached = vim.fn.has 'win32' == 0 },
     }
+
     -- Python adapter (using debugpy directly)
     dap.adapters.debugpy = {
       type = 'executable',
-      command = vim.fn.stdpath 'data' .. '/mason/packages/debugpy/venv/bin/python',
+      command = 'python', -- Changed from Mason path to system python
       args = { '-m', 'debugpy.adapter' },
     }
 
@@ -157,7 +114,6 @@ return {
         name = 'Launch file',
         program = '${file}',
         pythonPath = function()
-          -- You can change this to use a virtual environment if needed
           return 'python'
         end,
       },

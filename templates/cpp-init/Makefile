@@ -31,6 +31,8 @@ $(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp
 	@mkdir -p $(OBJ_DIR)
 	$(CXX) $(CXX_FLAGS) -I$(SRC_DIR) -c $< -o $@ 
 
+-include $(DEPS)
+
 clean:
 	rm -rf obj obj_debug
 
