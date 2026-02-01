@@ -1,8 +1,9 @@
 #include "{{CLASS_NAME}}.hpp"
 
-// Public constructors and destructors
+// Protected inheritance constructor
 {{CLASS_NAME}}::{{CLASS_NAME}}() {}
 
+// Public constructors and destructors
 {{CLASS_NAME}}::{{CLASS_NAME}}(const {{CLASS_NAME}}& other) {}
 
 {{CLASS_NAME}}::~{{CLASS_NAME}}() {}

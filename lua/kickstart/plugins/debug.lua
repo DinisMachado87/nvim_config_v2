@@ -102,7 +102,7 @@ return {
     -- Python adapter (using debugpy directly)
     dap.adapters.debugpy = {
       type = 'executable',
-      command = 'python', -- Changed from Mason path to system python
+      command = 'python3', -- Changed from Mason path to system python
       args = { '-m', 'debugpy.adapter' },
     }
 
@@ -114,7 +114,7 @@ return {
         name = 'Launch file',
         program = '${file}',
         pythonPath = function()
-          return 'python'
+          return 'python3'
         end,
       },
       {
@@ -127,7 +127,7 @@ return {
           return vim.split(args_string, ' ')
         end,
         pythonPath = function()
-          return 'python'
+          return 'python3'
         end,
       },
     }
