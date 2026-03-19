@@ -58,4 +58,85 @@ vim.api.nvim_create_autocmd('TextYankPost', {
   end,
 })
 
+vim.keymap.set('n', '<leader>dy', function()
+  local diagnostics = vim.diagnostic.get(0, { lnum = vim.fn.line '.' - 1 })
+  if #diagnostics > 0 then
+    local messages = {}
+    for _, diag in ipairs(diagnostics) do
+      table.insert(messages, diag.message)
+    end
+    local text = table.concat(messages, '\n')
+    vim.fn.setreg('+', text)
+    print 'Diagnostic copied to clipboard'
+  else
+    print 'No diagnostics on this line'
+  end
+end, { desc = 'Yank diagnostic to clipboard' })
+
+vim.api.nvim_create_autocmd('FileType', {
+  pattern = { 'cpp', 'c' },
+  callback = function(args)
+    local bufnr = args.buf
+
+    vim.keymap.set('n', '<leader>u', function()
+      local word = vim.fn.expand '<cWORD>'
+      local namespace, identifier = word:match '([%w_]+)::([%w_]+)'
+
+      if not namespace or not identifier then
+        vim.notify('Not on a namespaced identifier', vim.log.levels.WARN)
+        return
+      end
+
+      local using_line = 'using ' .. namespace .. '::' .. identifier .. ';'
+
+      -- Check if already exists
+      local found = false
+      for i = 1, vim.fn.line '$' do
+        if vim.fn.getline(i) == using_line then
+          found = true
+          break
+        end
+      end
+
+      if not found then
+        local insert_line = 1
+        local has_using = false
+
+        for i = 1, vim.fn.line '$' do
+          local line = vim.fn.getline(i)
+          if line:match '^using' then
+            has_using = true
+          end
+          if line:match '^#include' or line:match '^using' then
+            insert_line = i + 1
+          elseif line:match '%S' and not line:match '^//' then
+            break
+          end
+        end
+
+        -- ADD BLANK LINE if inserting after includes and no using declarations exist
+        local prev_line = vim.fn.getline(insert_line - 1)
+        if prev_line:match '^#include' and not has_using then
+          vim.fn.append(insert_line - 1, '')
+          vim.fn.append(insert_line, using_line)
+        else
+          vim.fn.append(insert_line - 1, using_line)
+        end
+
+        vim.notify('Added: ' .. using_line, vim.log.levels.INFO)
+      else
+        vim.notify('Already exists: ' .. using_line, vim.log.levels.INFO)
+      end
+
+      -- Remove namespace prefix on current line
+      local current_line = vim.fn.getline '.'
+      local new_line = current_line:gsub(namespace .. '::', '')
+      vim.fn.setline('.', new_line)
+    end, {
+      buffer = bufnr,
+      desc = 'Add [U]sing declaration and remove prefix',
+    })
+  end,
+})
+
 -- vim: ts=2 sts=2 sw=2 et

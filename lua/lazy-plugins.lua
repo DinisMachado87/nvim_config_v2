@@ -34,6 +34,7 @@ require('lazy').setup({
   require 'kickstart/plugins/todo-comments',
   require 'kickstart/plugins/mini',
   require 'kickstart/plugins/treesitter',
+  require 'kickstart/plugins/projectionist',
   --  require 'kickstart/plugins/42norm',
   --  require 'kickstart/plugins/vimbegood',
   --  require 'kickstart/plugins/avante',

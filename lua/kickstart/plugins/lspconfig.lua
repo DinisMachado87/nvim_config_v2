@@ -72,6 +72,15 @@ return {
             vim.keymap.set(mode, keys, func, { buffer = event.buf, desc = 'LSP: ' .. desc })
           end
 
+          -- remove new default nvim override LSP K mapping
+          vim.keymap.del('n', 'K', { buffer = event.buf })
+          -- restore man pages vim moves
+          map('K', function()
+            vim.cmd('Man ' .. vim.fn.expand '<cword>')
+          end, 'Man page')
+          -- move LSP hover to <leader>K
+          map('<leader>K', vim.lsp.buf.hover, 'Hover Documentation')
+
           -- Rename the variable under your cursor.
           --  Most Language Servers support renaming across files, etc.
           map('grn', vim.lsp.buf.rename, '[R]e[n]ame')
@@ -156,9 +165,9 @@ return {
           --
           -- This may be unwanted, since they displace some of your code
           if client and client_supports_method(client, vim.lsp.protocol.Methods.textDocument_inlayHint, event.buf) then
-            map('<leader>th', function()
+            map('<leader>ti', function()
               vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled { bufnr = event.buf })
-            end, '[T]oggle Inlay [H]ints')
+            end, '[T]oggle Inlay H[i]nts')
           end
         end,
       })
